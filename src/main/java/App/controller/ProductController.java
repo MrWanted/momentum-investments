@@ -19,13 +19,13 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
-    @PostMapping("/product")
+    @PostMapping("")
     public ResponseEntity save(Product product) {
         log.info("Saving a product...");
         return new ResponseEntity<>(service.save(product), HttpStatus.OK);
     }
 
-    @GetMapping("/products")
+    @GetMapping("")
     public ResponseEntity<Iterable<Product>> getAllProducts(){
         Iterable<Product> list = service.findAll();
         log.info("getting all products");
