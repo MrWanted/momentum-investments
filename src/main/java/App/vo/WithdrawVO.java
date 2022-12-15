@@ -2,12 +2,15 @@ package App.vo;
 
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.math.BigDecimal;
 
 @Data
 public class WithdrawVO {
-    private String investorId;
-    private String productId;
+    private Integer investorId;
+    private Integer productId;
     private String status;
-    private Timestamp timestamp;
+    private BigDecimal withdrawalAmount;
+    private BigDecimal currentBalance;
+    private String productType;
+    private String age;
 }

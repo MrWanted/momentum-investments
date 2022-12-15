@@ -12,21 +12,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/rest/api")
+@RequestMapping("/rest/api/withdrawal")
 @Slf4j
 @Data
 public class WithdrawalController {
-    //@Autowired
     private final WithdrawalService service;
 
     @Operation(summary = "Withdrawals", description = "save and update audit trail for withdrawal")
-    @PostMapping("/withdrawal")
+    @PostMapping("")
     public ResponseEntity save(@RequestBody Withdrawal withdrawal) {
         log.info("Saving a withdrawal...");
         return new ResponseEntity<>(service.save(withdrawal), HttpStatus.OK);
     }
     @Operation(summary = "Withdrawals", description = "get all Investors withdrawals")
-    @GetMapping("/withdrawals")
+    @GetMapping("")
     public ResponseEntity<Iterable<Withdrawal>> getAllInvestorsWithdrawals(){
         Iterable<Withdrawal> list = service.findAll();
         log.info("getting all withdrawals");
@@ -34,7 +33,7 @@ public class WithdrawalController {
     }
     @Operation(summary = "Withdraw", description = "Create a withdrawal with the given information of the investor.")
     @PostMapping("/person/{investorId}/product/{productID}/amount/{amount}")
-    public Person withdraw(@PathVariable("investorId") Integer investorId, @PathVariable("productID") String productID,
+    public ResponseEntity submitWithdrawal(@PathVariable("investorId") Integer investorId, @PathVariable("productID") String productID,
                            @PathVariable("amount") String withdrawalAmount){
         return null;
     }

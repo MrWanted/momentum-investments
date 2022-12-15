@@ -9,5 +9,5 @@ import java.util.List;
 public interface WithdrawalService {
     Withdrawal save(Withdrawal withdrawal);
     List<Withdrawal> findAll();
-    void withdraw(String investorId, String productId, BigDecimal amount);
+    void withdraw(Integer investorId, Integer productId, BigDecimal amount);
 }
