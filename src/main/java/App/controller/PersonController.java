@@ -39,9 +39,9 @@ public class PersonController {
         return service.findByID(id);
     }
 
-    @Operation(summary = "Validate tax-free aggregation system health", operationId = "isAlive")
+    @Operation(summary = "save investor details to the database", operationId = "isAlive")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "System is able to handle request",
+            @ApiResponse(responseCode = "200", description = "System is able to handle requests",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Person.class)),
                     }),
