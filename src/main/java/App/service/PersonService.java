@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface PersonService {
     Person save(Person product);
     List<Person> findAll();
-    Optional<Person> findByID(Integer id);
+    Person findByID(Integer id);
     void deleteById(Integer id);
 }

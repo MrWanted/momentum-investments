@@ -1,20 +1,18 @@
 package App.serviceImpl;
 
 import App.entity.Person;
+import App.exception.PersonNotFoundExeption;
 import App.service.PersonService;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import App.repository.PersonRepository;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Data
 public class PersonServiceImpl implements PersonService {
-    @Autowired
-    private PersonRepository repository;
+    private final PersonRepository repository;
     @Override
     public Person save(Person person) {
         return repository.save(person);
@@ -26,8 +24,8 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Optional<Person> findByID(Integer id) {
-        return repository.findById(id);
+    public Person findByID(Integer id) {
+        return repository.findById(id).orElseThrow(()->new PersonNotFoundExeption(id));
     }
 
     @Override
