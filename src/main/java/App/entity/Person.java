@@ -37,7 +37,7 @@ public class Person {
     @Size(min = 1, max = 6)
     private String gender;
     private String dateOfBirth; // TODO: to be derived from identity number
-    private String age;// TODO: to
+    private int age;// TODO: to
     // be derived from identity number
     @Schema(description = "identity number of the investor",
             name = "first name",
