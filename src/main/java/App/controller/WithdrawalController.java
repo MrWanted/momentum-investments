@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/rest/api/withdrawal")
 @Slf4j
@@ -31,10 +33,18 @@ public class WithdrawalController {
         log.info("getting all withdrawals");
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-    @Operation(summary = "Withdraw", description = "Create a withdrawal with the given information of the investor.")
-    @PostMapping("/person/{investorId}/product/{productID}/amount/{amount}")
-    public ResponseEntity submitWithdrawal(@PathVariable("investorId") Integer investorId, @PathVariable("productID") String productID,
-                           @PathVariable("amount") String withdrawalAmount){
-        return null;
+    @Operation(summary = "Submit Withdraw", description = "initiate withdrawal process with the given information of the investor.")
+    // document validation requirements
+    @PostMapping("/{investorId}/product/{productID}/amount/{amount}")
+    public ResponseEntity submitWithdrawal(@PathVariable("investorId") Integer investorId, @PathVariable("productID") Integer productID,
+                           @PathVariable("amount") BigDecimal withdrawalAmount){
+        log.info("submitting investment withdrawal...");
+        Withdrawal withdrawal = service.submitWithdrawal(investorId, productID, withdrawalAmount);
+        return new ResponseEntity(withdrawal, HttpStatus.OK);
+    }
+    @Operation(summary = "find a  Withdrawal by id", description = "initiate withdrawal process with the given information of the investor.")
+    @GetMapping("/{id}")
+    public ResponseEntity findById(@PathVariable Integer id){
+        return new ResponseEntity<>(service.findById(id),HttpStatus.OK);
     }
 }

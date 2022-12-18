@@ -12,5 +12,5 @@ public class WithdrawVO {
     private BigDecimal withdrawalAmount;
     private BigDecimal currentBalance;
     private String productType;
-    private String age;
+    private int age;
 }
