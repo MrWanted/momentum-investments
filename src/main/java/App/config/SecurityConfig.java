@@ -14,6 +14,10 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        //Since H2 console runs within a frame so while Spring security is enabled, frame options has to be disabled explicitly, in order to get the H2 console working.
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
+
         return http
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/").authenticated();
