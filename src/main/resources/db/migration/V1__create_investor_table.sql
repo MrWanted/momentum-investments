@@ -7,6 +7,5 @@ CREATE TABLE IF NOT EXISTS PRODUCT (
 
 create sequence person_sequence start with 1 increment by 1;
 
-insert into PRODUCT (name, type, balance) values ('product1', 'retirement',500000.00),
-                                                        ('product2', 'savings',36000.00);
-                                                        
+insert into PRODUCT (id,name, type, balance) values (1,'product1', 'retirement',500000.00);
+
