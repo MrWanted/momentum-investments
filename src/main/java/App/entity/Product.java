@@ -6,11 +6,7 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
-@Getter
-@ToString
+@Data
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
