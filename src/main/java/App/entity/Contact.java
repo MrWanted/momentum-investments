@@ -19,10 +19,7 @@ public class Contact {
     private  String cellphoneNo;
     private  String emailAddress;
     private  String telephoneNumber;
-    private  String faxNo;
-    private  String prefferedContactNo;
-    private  String portfolioAddress;
-
+    private  String preferredContactMethod;
     @ManyToOne
     @JoinColumn(name = "person_id")
     private Person person;
@@ -30,7 +27,6 @@ public class Contact {
     public Person getPerson() {
         return person;
     }
-
     public void setPerson(Person person) {
         this.person = person;
     }
