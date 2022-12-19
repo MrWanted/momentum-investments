@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
-public class Person {
+public class Person implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
@@ -36,9 +37,8 @@ public class Person {
             example = "Male, Female, X")
     @Size(min = 1, max = 6)
     private String gender;
-    private String dateOfBirth; // TODO: to be derived from identity number
-    private int age;// TODO: to
-    // be derived from identity number
+    private String dateOfBirth;
+    private int age;
     @Schema(description = "identity number of the investor",
             name = "first name",
             required = true,
@@ -54,4 +54,7 @@ public class Person {
 
     @OneToMany(mappedBy = "person",cascade = CascadeType.ALL)
     private List<Address> addresses = new ArrayList<>(1);
+
+    @OneToOne(mappedBy = "person",cascade = CascadeType.ALL)
+    private List<BankDetails> bankDetails = new ArrayList<>(1);
 }
