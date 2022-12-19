@@ -8,10 +8,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +19,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/rest/api/investor")
 @Slf4j
+@Data
 public class PersonController {
-    @Autowired
-    private PersonService service;
+    private final PersonService service;
 
     @RequestMapping("/problems/person-not-found")
     public String notfound() {
@@ -36,6 +35,7 @@ public class PersonController {
 
     @GetMapping("/{id}")
     public Person findById(@PathVariable Integer id) {
+        log.info("find investor details by id ...", id);
         return service.findByID(id);
     }
 
@@ -44,10 +44,6 @@ public class PersonController {
             @ApiResponse(responseCode = "200", description = "System is able to handle requests",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Person.class)),
-                    }),
-            @ApiResponse(responseCode = "403", description = "System is able to handle request",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProblemDetail.class)),
                     })
     })
     @PostMapping("/investor")
