@@ -28,11 +28,13 @@ public class PersonController {
         return "you will get enough description of the problem here";
     }
 
-    @GetMapping("/investors")
+    @Operation(summary = "find all investors")
+    @GetMapping("")
     public List<Person> findAll() {
         return service.findAll();
     }
 
+    @Operation(summary = "find investor details by Id")
     @GetMapping("/{id}")
     public Person findById(@PathVariable Integer id) {
         log.info("find investor details by id ...", id);
@@ -46,9 +48,19 @@ public class PersonController {
                             schema = @Schema(implementation = Person.class)),
                     })
     })
-    @PostMapping("/investor")
+    @PostMapping("")
     public ResponseEntity save(Person person) {
         log.info("Saving investor details...");
         return new ResponseEntity<>(service.save(person), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deletePersonByID(@PathVariable("id") int id) {
+        try {
+            service.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
