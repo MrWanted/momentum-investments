@@ -11,7 +11,12 @@ import App.service.WithdrawalService;
 import App.vo.WithdrawVO;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -26,11 +31,20 @@ public class WithdrawalServiceImpl implements WithdrawalService {
     private final WithdrawalRepository withdrawalRepository;
     private final PersonRepository investorRepository;
     private final PersonRepository personRepository;
+    @Autowired
+    private KafkaTemplate<String, WithdrawVO> kafkaTemplate;
 
     @Override
     public Withdrawal save(Withdrawal withdrawal) {
 
         return withdrawalRepository.save(withdrawal);
+    }
+
+    @Override
+    public Withdrawal updateWithdrawal(Withdrawal withdrawal, Integer withdrawalId) {
+        Withdrawal withdrawal1 = findById(withdrawalId);
+
+        return save(withdrawal1);
     }
 
     @Override
@@ -47,17 +61,17 @@ public class WithdrawalServiceImpl implements WithdrawalService {
      */
     @Override
     public Withdrawal submitWithdrawal(Integer investorId, Integer productId, BigDecimal amount) {
-        WithdrawVO vo = getWithdrawalVO(investorId, productId, amount);
-        Error error = validateAndWithdraw(vo.getCurrentBalance(), vo.getWithdrawalAmount(), vo.getProductType(), vo.getAge());
+        WithdrawVO withdrawalVO = getWithdrawalVO(investorId, productId, amount);
+        Error error = validateAndWithdraw(withdrawalVO.getCurrentBalance(), withdrawalVO.getWithdrawalAmount(), withdrawalVO.getProductType(), withdrawalVO.getAge());
         Withdrawal withdrawal = new Withdrawal();
         if (!error.isEmpty()) {
             withdrawal.setInvestorId(String.valueOf(investorId));
             withdrawal.setProductId(String.valueOf(productId));
             withdrawal.setWithdrawalAmount(amount);
             withdrawal.setStatus("STARTED");
-
             save(withdrawal);
-            //TODO trigger an event
+            //trigger an event
+            //this.kafkaTemplate.send("investor_withdrawals",withdrawalVO);
         } else {
             throw new WithdrawalException(error);
         }
@@ -65,13 +79,12 @@ public class WithdrawalServiceImpl implements WithdrawalService {
     }
 
     @Override
-    public Optional<Withdrawal> findById(Integer id) {
-        return withdrawalRepository.findById(id);
+    public Withdrawal findById(Integer id) {
+        return withdrawalRepository.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Withdrawal Not Found"));
     }
 
     @Override
     public Withdrawal update(WithdrawVO vo) {
-
         return null;
     }
 
@@ -81,7 +94,7 @@ public class WithdrawalServiceImpl implements WithdrawalService {
         if (investor.isPresent()) {
             Person person = investor.get();
             int age = person.getAge();
-            List<Product> products = person.getProducts();
+            List<Product> products = null;//person.getProducts();
             BigDecimal balance = BigDecimal.ZERO;
             String productType = null;
             for (Product product : products) {
