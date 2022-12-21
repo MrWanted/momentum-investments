@@ -4,27 +4,20 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
+@Getter
 @Entity
 @Data
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
+    @Column(name = "product_id", nullable = false)
     private Integer id;
-    private String type;//retirement or saving
+    private String type;
     private String name;
     private BigDecimal balance;
-
-    @ManyToOne
-    @JoinColumn(name = "person_id")
-    private Person person;
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
+    @ManyToMany(mappedBy = "products")
+    private List<Person> person = new ArrayList<>(1);
 }
