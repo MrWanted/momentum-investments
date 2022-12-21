@@ -20,16 +20,16 @@ CREATE TABLE IF NOT EXISTS product (
 CREATE TABLE person_product (
   person_id INT
  ,product_id INT
- ,CONSTRAINT film_person_product PRIMARY KEY (person_id, product_id)
- ,CONSTRAINT FK_film
+ ,CONSTRAINT person_product PRIMARY KEY (person_id, product_id)
+ ,CONSTRAINT FK_person
   FOREIGN KEY (person_id) REFERENCES person (person_id)
- ,CONSTRAINT FK_prduct
+ ,CONSTRAINT FK_product
   FOREIGN KEY (product_id) REFERENCES product (product_id)
 );
 
 INSERT INTO person
       (person_id, name, surname, gender, identitynumber, dateofbirth, age)
-      VALUES(1, 'Wanted', 'Lepota', 'Male', '8204305548083', '19820430', 40),
+      VALUES(1, 'Tshepo', 'Khumalo', 'Male', '8201315548083', '19820430', 40),
             (2, 'Jacqueline', 'Cruise', 'Female', '9204295548083', '19920429', 30);
 
 INSERT INTO product
