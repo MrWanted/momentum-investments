@@ -17,18 +17,20 @@ public class BankDetails {
     private Long id;
     @Schema(description = "account number of the account holder",
             required = true)
-    @Size(min = 1, max = 20)
     @Column(unique=true)
     private String accountNumber;
     @Schema(description = "the name of the bank")
     private String bankName;
-    @Schema(description = "branch code of the bank")
+    @Schema(description = "branch code of the bank",
+            required = true,
+            example = "2056223")
+    @Column(name = "branchcode")
     private String code;
 
     @Schema(description = "the type of the account",
             required = true,
-            example = "Savings, Cheque")
-    @Size(min = 13, max = 13)
+            example = "Savings, Cheque, Transmission")
+    @Size(min = 6, max = 20)
     private String accountType;
     @OneToOne
     @JoinColumn(name = "person_id")
