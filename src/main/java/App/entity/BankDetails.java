@@ -1,5 +1,6 @@
 package App.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -34,5 +35,6 @@ public class BankDetails {
     private String accountType;
     @OneToOne
     @JoinColumn(name = "person_id")
+    @JsonIgnore
     private Person person;
 }

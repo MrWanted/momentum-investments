@@ -1,5 +1,6 @@
 package App.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -7,7 +8,9 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -20,25 +23,22 @@ public class Person implements Serializable {
 
     private String surname;
     private String gender;
+    @Column(name = "dateofbirth")
     private String dateOfBirth;
     private int age;
 
+    @Column(name = "identitynumber")
     private String idno;
 
-    @OneToMany(mappedBy = "person",cascade = CascadeType.ALL)
-    private List<Contact> contact = new ArrayList<>(1);
+    @OneToMany()
+    private Set<Contact> contact = new HashSet<>(1);
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "investor_product",
-            joinColumns = @JoinColumn(name = "person_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> products = new ArrayList<>(1);
+    @OneToMany()
+    private Set<Product> products = new HashSet<>(1);
 
-    @OneToMany(mappedBy = "person",cascade = CascadeType.ALL)
-    private List<Address> addresses = new ArrayList<>(1);
+    @OneToMany()
+    private Set<Address> address = new HashSet<>(1);
 
-    @OneToOne(mappedBy = "person",cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private BankDetails bankDetails = new BankDetails();
 }
