@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 
 @Data
 public class WithdrawVO {
-    private Integer investorId;
-    private Integer productId;
+    private String investorId;
+    private String productId;
     private String status;
     private BigDecimal withdrawalAmount;
     private BigDecimal currentBalance;
