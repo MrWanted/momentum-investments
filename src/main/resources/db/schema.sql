@@ -1,10 +1,10 @@
 CREATE TABLE IF NOT EXISTS bank_details (
-    id bigint not null
-    , account_number varchar(255)
-    , account_type varchar(20)
-    , bank_name varchar(255)
-    , branchcode varchar(255)
-    , primary key (id)
+    id bigint not null,
+    account_number varchar(255),
+    account_type varchar(20),
+    bank_name varchar(255),
+    branchcode varchar(255),
+    primary key (id)
     );
 
 CREATE TABLE IF NOT EXISTS person (
@@ -71,6 +71,22 @@ CREATE TABLE IF NOT EXISTS contact (
     telephone_number varchar(255),
     primary key (id)
     );
-create table person_contact (person_id integer not null, contact_id bigint not null, primary key (person_id, contact_id));
 
---create table withdrawal (id bigint not null, created_by varchar(255), created_date timestamp(6), last_mod_date timestamp(6), modified_by varchar(255), investor_id varchar(255), product_id varchar(255), status varchar(255), "withdrawal-amount" numeric(38,2), primary key (id))
+CREATE TABLE IF NOT EXISTS person_contact (
+    person_id integer not null,
+    contact_id bigint not null,
+    primary key (person_id, contact_id));
+
+CREATE TABLE IF NOT EXISTS statement (
+    id bigint not null,
+    created_by varchar(255),
+    created_date timestamp(6),
+    last_mod_date timestamp(6),
+    modified_by varchar(255),
+    available_balance numeric(38,2),
+    investor_id varchar(255),
+    product_id varchar(255),
+    status varchar(255),
+    withdrawal_amount numeric(38,2),
+    primary key (id)
+    );
