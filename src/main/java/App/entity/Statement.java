@@ -2,6 +2,8 @@ package App.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -10,9 +12,8 @@ import java.math.BigDecimal;
 @Data
 public class Statement extends Auditable<String> implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @Column(name = "investor_id")
     private String investorId;
 

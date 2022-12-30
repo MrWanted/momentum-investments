@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class BankDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     @Schema(description = "The generated unique id when saved in database",
             name = "id"
