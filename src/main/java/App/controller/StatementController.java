@@ -34,7 +34,7 @@ public class StatementController {
     @Operation(summary = "Submit Withdraw", description = "initiate withdrawal process with the given information of the investor.")
     // document validation requirements
     @PostMapping("investor/{investorId}/product/{productId}/amount/{amount}")
-    public ResponseEntity submitWithdrawal(@PathVariable("investorId") Integer investorId, @PathVariable("productId") Integer productId,
+    public ResponseEntity submitWithdrawal(@PathVariable("investorId") String investorId, @PathVariable("productId") String productId,
                            @PathVariable("amount") BigDecimal withdrawalAmount){
         log.info("submitting investment withdrawal...");
         Statement withdrawal = service.submitWithdrawal(investorId, productId, withdrawalAmount);
