@@ -1,18 +1,25 @@
 package App.controller.event;
 
+import App.service.event.KafkaProducerService;
+import App.utils.AppConstants;
+import App.vo.WithdrawVO;
+import lombok.Data;
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+
+@Data
+@RequestMapping("/rest/api/events")
 @RestController
 public class EventProducerController {
-    @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaProducerService service;
 
-    @GetMapping("/publish")
-    public String publish(){
-        this.kafkaTemplate.send("my_topic","Hello Developer!");
-        return "published";
+    @GetMapping("/publish/")
+    public ResponseEntity publish(@RequestBody WithdrawVO message){
+        service.sendMessage(message);
+        return ResponseEntity.ok("Message sent to kafka topic");
     }
 }
