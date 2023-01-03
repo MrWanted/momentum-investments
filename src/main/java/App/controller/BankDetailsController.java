@@ -3,6 +3,7 @@ package App.controller;
 import App.entity.BankDetails;
 import App.service.BankDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,13 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/rest/api/bankdetails")
 @Slf4j
+@Data
 public class BankDetailsController {
     @Autowired
     private final BankDetailsService service;
-
-    public BankDetailsController(BankDetailsService service) {
-        this.service = service;
-    }
 
     @Operation(summary = "save investor bank details to the database")
     @PostMapping("")
