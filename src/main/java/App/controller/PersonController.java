@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/rest/api/investor")
@@ -30,15 +31,15 @@ public class PersonController {
 
     @Operation(summary = "find all investors")
     @GetMapping("")
-    public List<Person> findAll() {
-        return service.findAll();
+    public ResponseEntity<List<Person>> findAll() {
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
     @Operation(summary = "find investor details by Id")
     @GetMapping("/{id}")
-    public Person findById(@PathVariable Integer id) {
+    public ResponseEntity<Person> findById(@PathVariable Integer id) {
         log.info("find investor details by id ...", id);
-        return service.findByID(id);
+        return new ResponseEntity<>(service.findByID(id), HttpStatus.OK);
     }
 
     @Operation(summary = "save investor details to the database", operationId = "isAlive")
@@ -63,4 +64,6 @@ public class PersonController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //TODO enrol investor to products
 }
