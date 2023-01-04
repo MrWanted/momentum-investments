@@ -30,6 +30,12 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void deleteById(Integer id) {
-        repository.deleteById(id);
+        Person person = findByID(id);
+        if(person.getId() == id){
+            repository.deleteById(id);
+        }
+        else{
+            throw new PersonNotFoundExeption(id);
+        }
     }
 }
