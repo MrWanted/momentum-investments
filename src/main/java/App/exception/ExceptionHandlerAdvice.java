@@ -14,7 +14,8 @@ public class ExceptionHandlerAdvice {
     public ProblemDetail handlePostNotFoundException(PersonNotFoundExeption e) throws URISyntaxException {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,e.getMessage());
         problemDetail.setProperty("postId",e.getId());
-        problemDetail.setType(new URI("http://localhost:8080/problems/post-not-found"));
+        problemDetail.setType(new URI("http://localhost:8080/rest/api/investor/problems/person-not-found"));
+
         return problemDetail;
     }
 
