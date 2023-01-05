@@ -27,7 +27,7 @@ public class Person implements Serializable {
     @OneToMany()
     private Set<Contact> contact = new HashSet<>(1);
 
-    @OneToMany()
+    @OneToMany(cascade= CascadeType.MERGE)
     private Set<Product> products = new HashSet<>(1);
 
     @OneToMany()
