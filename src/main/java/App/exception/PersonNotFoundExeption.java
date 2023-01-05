@@ -13,6 +13,6 @@ public class PersonNotFoundExeption extends RuntimeException{
     private Integer id;
 
     public PersonNotFoundExeption(Integer id) {
-        super("Ivestor not found!");
+       this.id = id;
     }
 }
