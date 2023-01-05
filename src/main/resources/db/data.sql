@@ -18,5 +18,8 @@ INSERT INTO person_contact(person_id, contact_id) VALUES(1,1);
 
 INSERT INTO statement(created_by, created_date, last_mod_date, modified_by, available_balance, investor_id, product_id, status,withdrawal_amount)
 VALUES('user-1','2022-12-28T22:55:28.905Z','2022-12-28T22:55:28.905Z','user-1',500000.00,'1','1','started',5000),
-      ('user-2','2022-12-28T22:55:28.905Z','2022-12-28T22:55:28.905Z','user-2',36000.00,'1','2','not started',0);
+      ('user-2','2022-12-28T22:53:29.905Z','2022-12-28T22:55:28.905Z','user-2',36000.00,'1','2','not started',0);
+
+CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START 1;
+SELECT setval('hibernate_sequence',(SELECT max(id) FROM public.statement));
 
