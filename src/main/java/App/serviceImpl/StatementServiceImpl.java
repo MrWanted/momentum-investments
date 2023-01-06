@@ -1,6 +1,5 @@
 package App.serviceImpl;
 
-import App.Error;
 import App.entity.Person;
 import App.entity.Product;
 import App.entity.Statement;
@@ -19,8 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +26,8 @@ import java.util.Optional;
 @Slf4j
 public class StatementServiceImpl implements StatementService {
     public static final int MIN_RETIREMNT_AGE = 65;
+    public static final String INVESTOR_WITHDRAWAL_AGE_DOES_RESTRICTION = "investor age does not meet the minimum age restriction for the product";
+    public static final String INVESTOR_MAX_WITHDRAWAL_RESTRICTION = "investor cannot withdraw more than 90% of the current balance";
     private final StatementRepository statementRepository;
     private final PersonRepository investorRepository;
     private final PersonRepository personRepository;
@@ -48,13 +47,6 @@ public class StatementServiceImpl implements StatementService {
     }
 
     @Override
-    public Statement updateWithdrawal(Statement withdrawal, Integer withdrawalId) {
-        Statement withdrawal1 = findById(withdrawalId);
-
-        return save(withdrawal1);
-    }
-
-    @Override
     public List<Statement> findAll() {
         return statementRepository.findAll();
     }
@@ -68,10 +60,10 @@ public class StatementServiceImpl implements StatementService {
      */
     @Override
     public Statement submitWithdrawal(String investorId, String productId, BigDecimal withdrawalAmount) {
-        WithdrawVO withdrawalVO = getWithdrawalVO(investorId, productId, withdrawalAmount);
-        Error error = validateAndWithdraw(withdrawalVO.getCurrentBalance(), withdrawalAmount, withdrawalVO.getProductType(), withdrawalVO.getAge());
-        Statement statement = new Statement();
-        if (error.isEmpty()) {
+        try {
+            WithdrawVO withdrawalVO = getWithdrawalVO(investorId, productId, withdrawalAmount);
+            validate(withdrawalVO.getCurrentBalance(), withdrawalAmount, withdrawalVO.getProductType(), withdrawalVO.getAge());
+            Statement statement = new Statement();
             statement.setInvestorId(investorId);
             statement.setProductId(productId);
             statement.setBalance(withdrawalVO.getCurrentBalance());
@@ -79,27 +71,27 @@ public class StatementServiceImpl implements StatementService {
             statement.setStatus("STARTED");
             this.kafkaProducer.sendMessage(withdrawalVO);
             return save(statement);
-        } else {
-            log.error(error.getMessage());
-            log.warn("validation failed...");
-            throw new WithdrawalException(error);
+        }
+        catch (WithdrawalException we){
+            throw new WithdrawalException(we.getMessage());
+        }
+        catch (InvestorOrProductNotFoundException ipe) {
+            throw new InvestorOrProductNotFoundException();
+        }
+        catch(Exception e){
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
     public Statement findById(Integer id) {
-        return statementRepository.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Withdrawal Not Found"));
-    }
-
-    @Override
-    public Statement update(WithdrawVO vo) {
-        return null;
+        return statementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Withdrawal Not Found"));
     }
 
     private WithdrawVO getWithdrawalVO(String investorId, String productId, BigDecimal withdrawalAmount) {
         WithdrawVO vo = new WithdrawVO();
-        try{
-            Optional<Statement> investorStatement =  statementRepository.findByInvestorIdAndProductId(investorId,productId);
+        try {
+            Optional<Statement> investorStatement = statementRepository.findByInvestorIdAndProductId(investorId, productId);
 
             if (investorStatement.isPresent()) {
                 Person person = personRepository.findById(Integer.valueOf(investorId)).get();
@@ -111,17 +103,17 @@ public class StatementServiceImpl implements StatementService {
                 vo.setWithdrawalAmount(withdrawalAmount);
                 vo.setAge(person.getAge());
                 vo.setStatus("STARTED");
-                return vo;
             }
+        } catch (InvestorOrProductNotFoundException e) {
+            log.error("error getting the withdrawal vo", e);
+           throw new InvestorOrProductNotFoundException();
         }
-        catch (Exception e){
-            e.printStackTrace();
+        catch (WithdrawalException e) {
+            log.error("error getting the withdrawal vo", e);
+            throw new WithdrawalException("");
         }
-
-        //TODO
-       throw new WithdrawalException(null);
+        return vo;
     }
-
     /***
      * validation: withdrawalAmount should not be above current balance,
      * investor cannot withdraw more than 90% of the current balance,
@@ -130,34 +122,16 @@ public class StatementServiceImpl implements StatementService {
      * @param withdrawalAmount
      * @param productType
      */
-    private Error validateAndWithdraw(BigDecimal currentBalance, BigDecimal withdrawalAmount, String productType, int age) {
-        Error error = new Error();
-        MathContext mc = new MathContext(10, RoundingMode.HALF_UP);
-       // BigDecimal subtract = withdrawalAmount.subtract(currentBalance, mc);
-       /* if (withdrawalAmount.compareTo(currentBalance) == 1) {
+    private void validate(BigDecimal currentBalance, BigDecimal withdrawalAmount, String productType, int age) {
+        if (withdrawalAmount.compareTo(currentBalance) == 1) {
             log.warn("withdrawal amount cannot be greater than current balance");
-            error.setCode("E1");
-            error.setMessage("withdrawal amount cannot be greater than current balance");
-        } else*/ if ("retirement".equals(productType) & age < MIN_RETIREMNT_AGE) {
-            log.warn("investor age doe not meet the minimum age restriction for the product");
-            error.setCode("E2");
-            error.setMessage("withdrawal amount cannot be greater than current balance");
+            throw new WithdrawalException("withdrawal amount cannot be greater than current balance");
+        } else if (withdrawalAmount.compareTo(currentBalance.multiply(BigDecimal.valueOf(0.9))) == 1) {
+            log.warn(INVESTOR_MAX_WITHDRAWAL_RESTRICTION);
+            throw new WithdrawalException(INVESTOR_MAX_WITHDRAWAL_RESTRICTION);
+        } else if ("RETIREMENT".equalsIgnoreCase(productType) & age < MIN_RETIREMNT_AGE) {
+            log.warn(INVESTOR_WITHDRAWAL_AGE_DOES_RESTRICTION);
+            throw new WithdrawalException(INVESTOR_WITHDRAWAL_AGE_DOES_RESTRICTION);
         }
-        return error;
-    }
-
-    /***
-     * this method is triggered by an event when investment withdrawal get submitted
-     * retrieve the withdrawal transaction
-     * subtract the requested withdrawal amount from the current balance
-     * update the status
-     * @param vo
-     */
-    private void withdrawFromInvestmentAccount(WithdrawVO vo){
-         //find the product by Id, then update the balance - Product
-        //update the status from Withdrawal table by withdrawal id - Withdrawal
-       // withdrawalRepository.findById(vo.get)
-        //personRepository.findById(vo.getProductId());
-
     }
 }
