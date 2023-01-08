@@ -40,4 +40,8 @@ The application uses MVC based controllers to expose REST APIs. Uses Spring data
 - docker build -t momentum/momentum-app . 
 - docker run -p 8080:8080 momentum/momentum-app
 
+## How to log in to the system
+- Since the API is secured, the user would have to provide username and password in order to access the system
+- username: admin, password:password
+
 
