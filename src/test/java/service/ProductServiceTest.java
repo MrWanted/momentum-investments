@@ -45,7 +45,6 @@ public class ProductServiceTest {
         product.setId(1);
         product.setName("product1");
         product.setType("retirement");
-        product.setBalance(BigDecimal.valueOf(35000));
         return product;
     }
 }
