@@ -31,7 +31,7 @@ public class Auditable<T>  {
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
     protected Date lastModifiedDate;
-    //below might not be available, used for illustration purposes
+    //created_by and modified by should be retrieved from the logged in user
     @CreatedBy
     @Column(name="created_by")
     protected T createdBy;
