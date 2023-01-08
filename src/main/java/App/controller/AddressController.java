@@ -34,10 +34,4 @@ public class AddressController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Address Not Found");
         }
     }
-
-    @PostMapping("/address")
-    public ResponseEntity save(Address address){
-        return new ResponseEntity<>(service.save(address),HttpStatus.OK);
-    }
-
 }

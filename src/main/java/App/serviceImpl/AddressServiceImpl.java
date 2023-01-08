@@ -13,10 +13,6 @@ import java.util.Optional;
 public class AddressServiceImpl implements AddressService {
     private final AddressRepository repository;
     @Override
-    public Address save(Address address) {
-        return repository.save(address);
-    }
-    @Override
     public List<Address> findAll() {
         return repository.findAll();
     }

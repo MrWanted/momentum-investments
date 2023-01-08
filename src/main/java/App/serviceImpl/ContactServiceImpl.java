@@ -13,10 +13,6 @@ import java.util.Optional;
 public class ContactServiceImpl implements ContactService {
     private final ContactRepository repository;
     @Override
-    public Contact save(Contact address) {
-        return repository.save(address);
-    }
-    @Override
     public List<Contact> findAll() {
         return repository.findAll();
     }

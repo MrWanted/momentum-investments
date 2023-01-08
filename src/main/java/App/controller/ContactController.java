@@ -33,8 +33,4 @@ public class ContactController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Contact Not Found");
         }
     }
-    @PostMapping("/contact")
-    public ResponseEntity save(Contact contact){
-        return new ResponseEntity<>(service.save(contact),HttpStatus.OK);
-    }
 }
