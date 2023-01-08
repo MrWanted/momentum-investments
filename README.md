@@ -35,6 +35,7 @@ The application uses MVC based controllers to expose REST APIs. Uses Spring data
 - [access the system](http://localhost:8080/)
 - [access H2 console](http://localhost:8080/h2-console/)
 - [access REST API documentation](http://localhost:8080/swagger-ui/index.html)
+- [Actuator](http://localhost:8080/actuator)
 ## How to run using Docker:
 - ./mvnw package && java -jar target/momentum-ivestments-0.0.1-SNAPSHOT.jar
 - docker build -t momentum/momentum-app . 
