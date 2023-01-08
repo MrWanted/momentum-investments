@@ -16,11 +16,6 @@ import java.util.Optional;
 public class BankDetailsServiceImpl implements BankDetailsService {
     private BankDetailsRepository repository;
     @Override
-    public BankDetails save(BankDetails address) {
-        return repository.save(address);
-    }
-
-    @Override
     public List<BankDetails> findAll() {
         return repository.findAll();
     }

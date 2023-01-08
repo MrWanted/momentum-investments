@@ -17,11 +17,6 @@ public class BankDetailsController {
     @Autowired
     private final BankDetailsService service;
 
-    @Operation(summary = "save investor bank details to the database")
-    @PostMapping("")
-    public ResponseEntity save(BankDetails bankDetails){
-        return new ResponseEntity<>(service.save(bankDetails), HttpStatus.OK);
-    }
     @Operation(summary = "find all investor bank details from the database")
     @GetMapping("")
     public ResponseEntity<Iterable<BankDetails>> findAll(){

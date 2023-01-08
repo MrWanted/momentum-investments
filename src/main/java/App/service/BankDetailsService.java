@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BankDetailsService {
-    BankDetails save(BankDetails address);
     List<BankDetails> findAll();
     BankDetails findById(Integer id);
 }
