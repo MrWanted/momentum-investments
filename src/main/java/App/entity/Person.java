@@ -21,6 +21,7 @@ public class Person implements Serializable {
     private String dateOfBirth;
     private int age;
 
+    //we could add id type as well to cater for type of identity documents(RSA ID, Passport etc
     @Column(name = "identitynumber")
     private String idno;
 
