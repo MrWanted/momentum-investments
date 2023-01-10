@@ -69,8 +69,9 @@ public class StatementServiceImpl implements StatementService {
             statement.setBalance(withdrawalVO.getCurrentBalance());
             statement.setWithdrawalAmount(withdrawalAmount);
             statement.setStatus("STARTED");
+            statementRepository.save(statement);
             this.kafkaProducer.sendMessage(withdrawalVO);
-            return save(statement);
+            return statement;
         }
         catch (WithdrawalException we){
             throw new WithdrawalException(we.getMessage());
