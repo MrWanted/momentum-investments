@@ -12,6 +12,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class PersonNotFoundExeption extends RuntimeException{
     private Integer id;
 
+    public PersonNotFoundExeption(){
+        super();
+    }
+
+    public PersonNotFoundExeption(Exception e){
+        super(e);
+    }
+    public PersonNotFoundExeption(String message){
+        super(message);
+    }
     public PersonNotFoundExeption(Integer id) {
        this.id = id;
     }
