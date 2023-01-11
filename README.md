@@ -23,7 +23,7 @@ The application uses MVC based controllers to expose REST APIs. Uses Spring data
 - [H2 Database Engine](https://www.h2database.com/html/main.html) 
 - [Spring for Apache Kafka](https://docs.spring.io/spring-kafka/reference/html/)
 - [JUnit 4](https://junit.org/junit4/)
-- [Docker](https://www.docker.com/)// TODO
+- [Docker](https://www.docker.com/)
 - [Flyway Database Migration](https://flywaydb.org/)
 - [OpenAPI](https://github.com/springdoc/springdoc-openapi)
 - and other java related libraries
