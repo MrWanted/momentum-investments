@@ -13,7 +13,7 @@ capture the withdrawal amount and banking details the money must be paid into. O
 the withdrawal is completed, investors should receive a notification that shows them the balance before
 the withdrawal was made , the amount withdrawn and the closing balance.
 
-### NB: The complete problem statement available via this link: URL
+### NB: The complete problem statement available via this link: [Momentum_Investments_Java_Developer.pdf](Momentum_Investments_Java_Developer.pdf)
 
 ## Application technology stack
 The application uses MVC based controllers to expose REST APIs. Uses Spring data to access the database
