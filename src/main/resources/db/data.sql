@@ -20,6 +20,6 @@ INSERT INTO statement(created_by, created_date, last_mod_date, modified_by, avai
 VALUES('user-1','2022-12-28T22:55:28.905Z','2022-12-28T22:55:28.905Z','user-1',500000.00,'1','1','started',5000),
       ('user-2','2022-12-28T22:53:29.905Z','2022-12-28T22:55:28.905Z','user-2',36000.00,'1','2','not started',0);
 
-CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START 1;
-SELECT setval('hibernate_sequence',(SELECT max(id) FROM public.statement));
+--CREATE SEQUENCE IF NOT EXISTS hibernate_sequence START 1;
+--SELECT setval('hibernate_sequence',(SELECT max(id) FROM public.statement));
 

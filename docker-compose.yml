@@ -2,7 +2,6 @@ version: "3.8"
 services:
   postgres:
     image: postgres:alpine
-    network_mode: bridge
     container_name: momentum-postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
@@ -15,10 +14,8 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_DB=momentum-postgres-db
     restart: unless-stopped
-  # REST API app
   app:
     image: momentum/momentum-app
-    network_mode: bridge
     container_name: momentum-app
     expose:
       - 8080
@@ -27,7 +24,9 @@ services:
     volumes:
       - /home/admin01/dev:/var/tmp
     restart: unless-stopped
-
+    depends_on:
+      - postgres
+      - kafka
   pgadmin:
     container_name: momemtum-pgadmin4
     image: dpage/pgadmin4
