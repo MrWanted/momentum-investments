@@ -36,7 +36,7 @@ public class ExceptionHandlerAdvice {
     }
 
     @ExceptionHandler(WithdrawalException.class)
-    public ProblemDetail handleWithdrawalException(InvestorOrProductNotFoundException e) throws URISyntaxException {
+    public ProblemDetail handleWithdrawalException(WithdrawalException e) throws URISyntaxException {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,e.getMessage());
         problemDetail.setProperty("postId",e.getMessage());
         //URL below hardcoded for illustration purposes
